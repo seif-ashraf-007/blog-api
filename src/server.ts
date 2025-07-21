@@ -12,7 +12,7 @@ import helmet from 'helmet';
 import limiter from '@/lib/express_rate_limit';
 import v1Routes from '@/routes/v1/index';
 import { connectToDatabase, disconnectFromDatabase } from '@/lib/mongoose';
-import { logger } from './lib/winston';
+import logger from './lib/logger';
 
 const app = express();
 
@@ -68,7 +68,7 @@ app.use(limiter);
       logger.info(`Server running: http://localhost:${config.PORT}`);
     });
   } catch (error) {
-    logger.error('Failed to start the server', error);
+    logger.error(error, 'Failed to start the server');
 
     if (config.NODE_ENV === 'production') {
       process.exit(1);
@@ -82,7 +82,7 @@ const handleServerShutdown = async () => {
     logger.info(`Server SHUTDOWN`);
     process.exit(0);
   } catch (error) {
-    logger.error(`Error during server shutdown `, error);
+    logger.error(error, `Error during server shutdown `);
   }
 };
 
